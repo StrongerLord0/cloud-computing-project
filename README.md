@@ -1,4 +1,4 @@
-# Proyecto: Sin nombre asignado aún
+# Proyecto: Sin nombre asignado (aún)
 
 ## Participantes
 
