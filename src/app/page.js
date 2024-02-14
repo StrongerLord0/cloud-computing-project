@@ -104,7 +104,7 @@ export default function Home() {
             </span>
           </h2>
           <p className={`m-0 max-w-[30ch] text-sm opacity-50 text-balance`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
+              Mi primer cambio, profe no le se a nada, tire paro jajaja
           </p>
         </a>
       </div>
