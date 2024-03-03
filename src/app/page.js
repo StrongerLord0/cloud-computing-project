@@ -16,7 +16,7 @@ export default function Home() {
                 className="flex w-screen h-screen flex-col bg-background-landing bg-cover"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ ease: 'easeInOut', duration: 0.9 }}
+                transition={{ ease: 'easeInOut', duration: 1.2 }}
             >
                 <div className="flex w-full h-1/6 items-center justify-items-start">
                     <div className="pt-5 pr-5 pl-5 h-5/6 w-2/3 ml-auto hidden lg:flex">
@@ -30,7 +30,7 @@ export default function Home() {
                         </ul>
                     </nav>
                 </div>
-                <div className="flex w-full h-3/4 items-center">
+                <div className="flex w-full h-2/3 items-center">
                     <div className="flex w-full flex-col text-center text-white">
                         <h1 className="text-4xl font-normal font-raleway text-gray-300">ByOx</h1>
                         <p className="text-md font-normal leading-relaxed font-raleway text-gray-300">Build your Own eXperience.</p>
