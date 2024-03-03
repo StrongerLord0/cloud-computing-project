@@ -6,3 +6,5 @@ function checkImageExtension(n1, n2){
 }
 
 module.exports = checkImageExtension
+
+
