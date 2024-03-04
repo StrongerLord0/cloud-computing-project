@@ -13,7 +13,8 @@ export default function Home() {
             transition={{ ease: 'easeInOut', duration: 0.9 }} // Duración de la transición en segundos
         >
             <motion.div
-                className="flex w-screen h-screen flex-col bg-background-landing bg-cover"
+                className="flex w-screen h-screen flex-col bg-cover"
+                style={{background: "radial-gradient(37.24% 60.39% at 53.49% 33.24%, #020A20 0%, #010309 59.81%, #000 100%, #000 100%)"}}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ ease: 'easeInOut', duration: 1.2 }}
