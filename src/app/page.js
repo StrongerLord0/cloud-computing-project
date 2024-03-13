@@ -3,6 +3,7 @@ import React from "react";
 import Image from 'next/image';
 import boxPNG from '../images/bOx.png';
 import { motion } from 'framer-motion';
+import {signIn} from 'next-auth/react'
 
 export default function Home() {
     return (
@@ -28,6 +29,7 @@ export default function Home() {
                             <li className="font-normal leading-relaxed font-raleway text-gray-300 text-base"><a href="#info">¿Qué hace?</a></li>
                             <li className="font-normal leading-relaxed font-raleway text-gray-300 text-base"><a href="#service">Servicio</a></li>
                             <li className="font-normal leading-relaxed font-raleway text-gray-300 text-base"><a href="#contact">Contacto</a></li>
+                            <li className="font-normal leading-relaxed font-raleway text-gray-300 text-base"><button onClick={() => signIn()}>Iniciar Sesión</button></li>
                         </ul>
                     </nav>
                 </div>
