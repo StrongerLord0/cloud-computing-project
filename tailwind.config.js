@@ -8,6 +8,7 @@ module.exports = {
   theme: {
     extend: {
       backgroundImage: {
+        "background-landing" : "url('../images/byOxbg.b95fe24f.webp')",
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
