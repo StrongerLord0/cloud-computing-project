@@ -3,6 +3,7 @@ import React from "react";
 import Image from 'next/image';
 import boxPNG from '../images/bOx.png';
 import { motion } from 'framer-motion';
+import {signIn} from 'next-auth/react'
 
 export default function Home() {
     return (
@@ -13,10 +14,11 @@ export default function Home() {
             transition={{ ease: 'easeInOut', duration: 0.9 }} // Duración de la transición en segundos
         >
             <motion.div
-                className="flex w-screen h-screen flex-col bg-background-landing bg-cover"
+                className="flex w-screen h-screen flex-col bg-cover"
+                style={{background: "radial-gradient(37.24% 60.39% at 53.49% 33.24%, #020A20 0%, #010309 59.81%, #000 100%, #000 100%)"}}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ ease: 'easeInOut', duration: 0.9 }}
+                transition={{ ease: 'easeInOut', duration: 1.2 }}
             >
                 <div className="flex w-full h-1/6 items-center justify-items-start">
                     <div className="pt-5 pr-5 pl-5 h-5/6 w-2/3 ml-auto hidden lg:flex">
@@ -27,10 +29,11 @@ export default function Home() {
                             <li className="font-normal leading-relaxed font-raleway text-gray-300 text-base"><a href="#info">¿Qué hace?</a></li>
                             <li className="font-normal leading-relaxed font-raleway text-gray-300 text-base"><a href="#service">Servicio</a></li>
                             <li className="font-normal leading-relaxed font-raleway text-gray-300 text-base"><a href="#contact">Contacto</a></li>
+                            <li className="font-normal leading-relaxed font-raleway text-gray-300 text-base"><button onClick={() => signIn()}>Iniciar Sesión</button></li>
                         </ul>
                     </nav>
                 </div>
-                <div className="flex w-full h-3/4 items-center">
+                <div className="flex w-full h-2/3 items-center">
                     <div className="flex w-full flex-col text-center text-white">
                         <h1 className="text-4xl font-normal font-raleway text-gray-300">ByOx</h1>
                         <p className="text-md font-normal leading-relaxed font-raleway text-gray-300">Build your Own eXperience.</p>
