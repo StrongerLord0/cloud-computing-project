@@ -10,6 +10,7 @@ const handler = NextAuth({
     }),
     // ...add more providers here
   ],
+  secret: process.env.SECRET
 })
 
 export {handler as GET, handler as POST}
