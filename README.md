@@ -1,4 +1,4 @@
-# Proyecto: byOx (aún)
+# Proyecto: byOx
 
 ## Participantes
 
