@@ -28,7 +28,7 @@ export default function Home() {
     };
 
     const getUsers = async () => {
-        const response = await fetch(process.env.NEXTAUTH_URL+'api/users');
+        const response = await fetch(process.env.NEXTAUTH_URL+'/api/users');
         const data = await response.json();
         return data; // Devuelve los datos en lugar de intentar cambiar el estado directamente
     }
