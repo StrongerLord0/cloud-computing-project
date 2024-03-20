@@ -58,11 +58,26 @@ export default function Home() {
                             <p className="text-md font-normal leading-relaxed font-raleway text-gray-300">Build your Own eXperience.</p>
                         </div>
                     ) : content === 'info' ? (
-                        <></>
+                        <>
+                            <div className="flex w-full flex-col text-center text-white">
+                                <h1 className="text-4xl font-normal font-raleway text-gray-300">ByOx</h1>
+                                <p className="text-md font-normal leading-relaxed font-raleway text-gray-300">Build your Own eXperience.</p>
+                            </div>
+                        </>
                     ) : content === 'service' ? (
-                        <></>
+                        <>
+                            <div className="flex w-full flex-col text-center text-white">
+                                <h1 className="text-4xl font-normal font-raleway text-gray-300">ByOx</h1>
+                                <p className="text-md font-normal leading-relaxed font-raleway text-gray-300">Build your Own eXperience.</p>
+                            </div>
+                        </>
                     ) : content === 'contact' ? (
-                        <></>
+                        <>
+                            <div className="flex w-full flex-col text-center text-white">
+                                <h1 className="text-4xl font-normal font-raleway text-gray-300">ByOx</h1>
+                                <p className="text-md font-normal leading-relaxed font-raleway text-gray-300">Build your Own eXperience.</p>
+                            </div>
+                        </>
                     ) : content === 'table' ? (
 
                         <div className="flex w-full h-4/5 flex-col text-center text-white">
