@@ -1,17 +1,39 @@
 "use client";
-"use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { motion } from 'framer-motion';
 import Navigation from "./navigation/navigation"
 import { useState } from "react";
+import Image from 'next/image';
 
 export default function Home() {
 
+    const [users, setUsers] = useState({});
     const [content, setContent] = useState('landing');
+
+    useEffect(() => {
+        getUsers() // Llama a getUsers
+            .then(data => {
+                setUsers(data); // Actualiza el estado users con los datos obtenidos
+                console.log("consulta");
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('There was an error!', error);
+            });
+        console.log(users);
+
+    }, [content]);
 
     const changeContent = (newContent) => {
         setContent(newContent);
     };
+
+    const getUsers = async () => {
+        const response = await fetch('http://localhost:3000/api/users');
+        const data = await response.json();
+        return data; // Devuelve los datos en lugar de intentar cambiar el estado directamente
+    }
+
 
     return (
         <motion.div
@@ -30,18 +52,40 @@ export default function Home() {
                 <div className="flex w-full h-1/6 items-center justify-items-start">
                     <Navigation onChangeContent={changeContent} />
                 </div>
-                <div className="flex w-full h-2/3 items-center">
+                <div className="flex w-full h-auto items-center text-center">
                     {content === 'landing' ? (
-                    <div className="flex w-full flex-col text-center text-white">
-                        <h1 className="text-4xl font-normal font-raleway text-gray-300">ByOx</h1>
-                        <p className="text-md font-normal leading-relaxed font-raleway text-gray-300">Build your Own eXperience.</p>
-                    </div>
+                        <div className="flex w-full flex-col text-center text-white">
+                            <h1 className="text-4xl font-normal font-raleway text-gray-300">ByOx</h1>
+                            <p className="text-md font-normal leading-relaxed font-raleway text-gray-300">Build your Own eXperience.</p>
+                        </div>
                     ) : content === 'info' ? (
                         <></>
                     ) : content === 'service' ? (
                         <></>
                     ) : content === 'contact' ? (
                         <></>
+                    ) : content === 'table' ? (
+                        <div className="flex w-1/2 flex-col text-center text-white">
+                            <h1 className="text-4xl font-normal font-raleway text-gray-300">ByOx</h1>
+                            <table>
+                                {users.map(user => (
+                                    <tr key={user.id}>
+                                        <td>{user.name}</td>
+                                        <td>{user.email}</td>
+                                        <td
+                                            style={{
+                                                '--image-url': `url(${user.image})`,
+                                                backgroundSize: 'cover', // Asegura que la imagen cubra todo el espacio disponible
+                                                backgroundPosition: 'center', // Centra la imagen en el elemento
+                                                height: '100px', // Define la altura del elemento
+                                                width: '100px' // Define la anchura del elemento
+                                            }}
+                                            className="bg-[image:var(--image-url)]"
+                                        />
+                                    </tr>
+                                ))}
+                            </table>
+                        </div>
                     ) : <></>}
                 </div>
             </motion.div>
