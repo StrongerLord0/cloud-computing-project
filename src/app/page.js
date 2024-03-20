@@ -28,7 +28,7 @@ export default function Home() {
     };
 
     const getUsers = async () => {
-        const response = await fetch('http://localhost:3000/api/users');
+        const response = await fetch(NEXTAUTH_URL+'api/users');
         const data = await response.json();
         return data; // Devuelve los datos en lugar de intentar cambiar el estado directamente
     }
