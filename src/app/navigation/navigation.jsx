@@ -22,7 +22,10 @@ export default function Navigation({ onChangeContent }) {
                     <li className="font-normal leading-relaxed font-raleway text-gray-300 text-base"><button onClick={() => onChangeContent('service')}>Información</button></li>
                     <li className="font-normal leading-relaxed font-raleway text-gray-300 text-base"><button onClick={() => onChangeContent('contact')}>Contacto</button></li>
                     {status === "authenticated" ? (
-                        <li className="font-normal leading-relaxed font-raleway text-gray-300 text-base"><button onClick={() => onChangeContent('table')}>{session.user.name}</button></li>
+                        <div>
+                            <li className="font-normal leading-relaxed font-raleway text-gray-300 text-base"><button onClick={() => onChangeContent('table')}>{session.user.name}</button></li>
+                            <li className="font-normal leading-relaxed font-raleway text-gray-300 text-base"><button onClick={() => signOut()}>Cerrar Sesión</button></li>
+                        </div>
                     ) : (
                         <li className="font-normal leading-relaxed font-raleway text-gray-300 text-base"><button onClick={() => signIn()}>Iniciar Sesión</button></li>
                     )}
