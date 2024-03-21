@@ -84,7 +84,7 @@ export default function Home() {
                     ) : content === 'table' ? (
 
                         <div className="flex w-full h-4/5 flex-col text-center text-white">
-                            <h1 className="flex text-4xl font-normal font-raleway text-gray-300">Lista de usuarios</h1>
+                            <h1 className="flex text-4xl font-normal font-raleway text-gray-300">Lista de usuarios ({users.length})</h1>
                             <div className="flex w-full h-full flex-col text-center text-white overflow-y-auto scrollbar scrollbar-thin scrollbar-thumb-gray-900 scrollbar-track-gray-100">
                                 <table>
                                     {users.map(user => (
