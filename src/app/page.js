@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { motion } from 'framer-motion';
 import Navigation from "./navigation/navigation"
 import { useState } from "react";
+import axios from "axios";
 
 export default function Home() {
 
@@ -28,9 +29,11 @@ export default function Home() {
     };
 
     const getUsers = async () => {
-        const response = await fetch('https://social.babyday.studio/api/users', { cache: "no-store" });
-        const data = await response.json();
-        return data; // Devuelve los datos en lugar de intentar cambiar el estado directamente
+        //const response = await fetch('https://social.babyday.studio/api/users', { cache: "no-store" });
+        //const data = await response.json();
+        //return data; // Devuelve los datos en lugar de intentar cambiar el estado directamente
+        const response = await axios.get('https://social.babyday.studio/api/users', { cache: "no-store" });
+        return response.data; // Devuelve los datos en lugar de intentar cambiar el estado directamente
     }
 
 
@@ -81,7 +84,7 @@ export default function Home() {
                     ) : content === 'table' ? (
 
                         <div className="flex w-full h-4/5 flex-col text-center text-white">
-                            <h1 className="flex text-4xl font-normal font-raleway text-gray-300">Lista de usuarios</h1>
+                            <h1 className="flex text-4xl font-normal font-raleway text-gray-300">Lista de usuarios ({users.length})</h1>
                             <div className="flex w-full h-full flex-col text-center text-white overflow-y-auto scrollbar scrollbar-thin scrollbar-thumb-gray-900 scrollbar-track-gray-100">
                                 <table>
                                     {users.map(user => (
