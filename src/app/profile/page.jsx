@@ -23,7 +23,7 @@ export default function Profile() {
     }, []);
 
     const getUsers = async () => {
-        const response = await fetch('http://localhost:3000/api/users', { cache: "no-store" });
+        const response = await fetch('/api/users', { cache: "no-store" });
         const data = await response.json();
         return data; // Devuelve los datos en lugar de intentar cambiar el estado directamente
     }
