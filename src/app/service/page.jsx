@@ -26,8 +26,7 @@ export default function About() {
                 if (file.type.match('image.*')) {
                     const formData = new FormData();
                     formData.append("file", file);
-
-                    fetch(apiUrl, {
+                    fetch("https://api.babyday.studio/analyze", {
                         method: "POST",
                         body: formData,
                     })
