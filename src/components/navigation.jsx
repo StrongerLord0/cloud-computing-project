@@ -22,8 +22,8 @@ export default function Navigation() {
             <nav className="w-full lg:w-1/3 ml-auto flex items-center">
                 <ul className="w-full lg:w-full flex justify-evenly">
                     <li className="font-normal leading-relaxed font-raleway text-gray-300 text-base"><Link href="/demo">¿Qué hace?</Link></li>
-                    <li className="font-normal leading-relaxed font-raleway text-gray-300 text-base"><Link href="/about">Información</Link></li>
                     <li className="font-normal leading-relaxed font-raleway text-gray-300 text-base"><Link href="/contact">Contacto</Link></li>
+                    <li className="font-normal leading-relaxed font-raleway text-gray-300 text-base"><Link href="/service">Servicio</Link></li>
                     {status === "authenticated" ? (
                         <li className="font-normal leading-relaxed font-raleway text-gray-300 text-base"><Link href="/profile">{session.user.name}</Link></li>
                     ) : (
