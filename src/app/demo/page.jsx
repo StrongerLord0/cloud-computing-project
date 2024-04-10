@@ -17,14 +17,13 @@ export default function WhatDoes() {
                 animate={{ opacity: 1 }}
                 transition={{ ease: 'easeInOut', duration: 1.2 }}
             >
-                <div className="flex w-1/2 flex-col text-center text-white">
-                    <h1 className="text-4xl font-normal font-raleway text-gray-300">ByOx</h1>
-                    <p className="text-md font-normal leading-relaxed font-raleway text-gray-300">Build your Own eXperience.</p>
+                <div className="flex w-1/2 h-full flex-col text-center overflow-hidden text-white justify-center items-center">
+                    <img className="w-2/3 h-full object-cover object-center transform rounded-3xl" src="https://c.pxhere.com/images/97/ad/93c005dcd7f716ebcea0e66fd4f1-1457317.jpg!d"/>
                 </div>
-                <div className="flex w-1/2 flex-col text-center text-white items-center">
-                    <p className="w-2/3 text-md font-extralight leading-relaxed font-raleway text-gray-300">
+                <div className="flex w-1/2 h-full flex-col text-center text-white items-center justify-center">
+                    <p className="w-2/3 text-2xl font-extralight leading-relaxed font-raleway text-gray-300">
                         ByOx es una aplicación innovadora que utiliza tecnología de reconocimiento facial y el análisis de emociones para
-                        mejorar la experiencia del usuario en la web y en la vida diaria. La aplicación aprovecha la cámara de tu dispositivo
+                        mejorar la experiencia del usuario en la web. La aplicación aprovecha la cámara de tu dispositivo
                         para detectar tus emociones, personalizar la experiencia del usuario en base a los resultados y brindarte información
                         que podría ser de tu interés.
                     </p>

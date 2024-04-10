@@ -5,10 +5,8 @@ import Navigation from "../../components/navigation"
 
 export default function About() {
 
-    const apiUrl = process.env.IA_URL;
     const videoRef = useRef(null);
-    const canvasRef = useRef(null);
-    const [emotion, setEmotion] = useState('loading...')
+    const [emotion, setEmotion] = useState('Toma una foto para analizarla...')
 
     const takePhotoAndSend = () => {
 
@@ -40,16 +38,17 @@ export default function About() {
                             return response.json();
                         })
                         .then(data => {
-                            if(data){
-                                if(!data.error){
+                            if (data) {
+                                if (!data.error) {
                                     setEmotion(data.result[0].dominant_emotion);
                                 } else {
-                                    setEmotion(data.error);    
+                                    setEmotion(data.error);
                                 }
-                                
+                                if (data.result[0].dominant_emotion != 'No face detected...') {
+                                    videoRef.current.pause();
+                                }
                             }
                             else {
-
                             }
                         })
                         .catch(error => {
@@ -61,17 +60,14 @@ export default function About() {
         }
     }
 
+    const initializeCamera = () => {
+        videoRef.current.play();
+        setEmotion('Toma una foto para analizarla...');
+    };
+
     useEffect(() => {
-
-        const interval = setInterval(() => {
-
-            takePhotoAndSend();
-
-        }, 1000); // 3000 milisegundos = 3 segundos
-
         const videoConstraints = {
             facingMode: 'user',
-            aspectRatio: 9 / 16,
         };
 
         const videoContainer = document.getElementById('video-container');
@@ -83,7 +79,7 @@ export default function About() {
                     video.play();
                     video.style.width = '100%';
                     video.style.height = '100%';
-                    video.style.objectFit = 'fit';
+                    video.style.objectFit = 'cover';
                     videoContainer.innerHTML = '';
                     videoContainer.appendChild(video);
 
@@ -93,9 +89,6 @@ export default function About() {
                     console.error('Error accessing the camera:', error);
                 });
         }
-
-        // Función de limpieza para limpiar el intervalo cuando el componente se desmonte
-        return () => clearInterval(interval);
     }, []);
 
     return (
@@ -107,23 +100,57 @@ export default function About() {
                 <Navigation />
             </div>
             <motion.div
-                className="flex w-full h-2/3 items-center text-center"
+                className="flex w-full h-5/6 items-center text-center"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ ease: 'easeInOut', duration: 1.2 }}
             >
-                <div className="flex w-1/2 h-4/5 flex-col text-center text-white items-center">
-                    <div id="video-container" className="flex w-1/2 h-full overflow-hidden items-center text-center">
+                <div className="flex w-1/3 h-4/5 flex-col text-center text-white items-center">
+                    <div id="video-container" className="flex aspect-[3/4] overflow-hidden items-center text-center rounded-lg">
 
                     </div>
-                    <div className="flex h-1/6 overflow-hidden items-center text-center text-2xl text-gray-300">
-                        {emotion}
-                    </div>
+                    {emotion === 'No face detected...' || emotion === 'Toma una foto para analizarla...' || emotion === '' ?
+                        <button onClick={takePhotoAndSend} className="mt-4 py-2 px-4 bg-gray-900 text-white leading-relaxed font-raleway rounded-lg shadow-md hover:bg-gray-700">
+                            Tomar foto y analizar
+                        </button>
+                        :
+                        <button onClick={initializeCamera} className="mt-4 py-2 px-4 bg-gray-900 text-white leading-relaxed font-raleway rounded-lg shadow-md hover:bg-gray-700">
+                            Reinicar cámara
+                        </button>
+                    }
                 </div>
-                <div className="flex w-1/2 flex-col text-center text-white items-center">
-                    <p className="w-2/3 text-md font-extralight leading-relaxed font-raleway text-gray-300">
-                        Esta es una muestra del uso de nuestra aplicación
-                    </p>
+                <div className="flex w-2/3 h-full flex-col text-center text-white items-center">
+                    <div className="flex w-5/6 justify-end pb-3">
+                        <div className="flex h-full overflow-hidden items-center text-center text-2xl text-gray-300">
+                            {emotion}
+                        </div>
+                    </div>
+                    <div className="flex w-5/6 h-3/4 overflow-auto items-center text-center">
+                        <div className="flex w-full flex-col text-md font-extralight leading-relaxed font-raleway text-gray-300">
+                            <p className="flex w-full justify-start text-left mt-10 mb-10">
+                                Espacio para webscraping
+                            </p>
+                            <p className="flex w-full justify-start text-left mt-10 mb-10">
+                                Espacio para webscraping
+                            </p>
+                            <p className="flex w-full justify-start text-left mt-10 mb-10">
+                                Espacio para webscraping
+                            </p>
+                            <p className="flex w-full justify-start text-left mt-10 mb-10">
+                                Espacio para webscraping
+                            </p>
+                            <p className="flex w-full justify-start text-left mt-10 mb-10">
+                                Espacio para webscraping
+                            </p>
+                            <p className="flex w-full justify-start text-left mt-10 mb-10">
+                                Espacio para webscraping
+                            </p>
+                            <p className="flex w-full justify-start text-left mt-10 mb-10">
+                                Espacio para webscraping
+                            </p>
+                        </div>
+                        {/* Aquí puedes agregar el contenido adicional que será scrolleable */}
+                    </div>
                 </div>
             </motion.div>
         </div>

@@ -31,3 +31,13 @@ body {
     text-wrap: balance;
   }
 }
+
+::-webkit-scrollbar {
+  width: 5px;
+  background-color: black;
+  color:aliceblue;
+}
+::-webkit-scrollbar-thumb {
+  background-color: white;
+  border-radius: 5px;
+}

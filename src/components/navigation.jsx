@@ -12,7 +12,7 @@ export default function Navigation() {
 
     return (
         <>
-            <div className="pt-5 pr-5 pl-5 h-5/6 w-2/3 ml-auto hidden lg:flex">
+            <div className="pt-2 pb-2 pl-5 h-5/6 w-2/3 ml-auto hidden lg:flex">
                 <button>
                     <Link href="/">
                         <Image src={boxPNG} className="flex w-auto h-full max-w-xs invert opacity-75" />
@@ -20,12 +20,12 @@ export default function Navigation() {
                 </button>
             </div>
             <nav className="w-full lg:w-1/3 ml-auto flex items-center">
-                <ul className="w-full lg:w-full flex justify-evenly">
+                <ul className="w-full lg:w-full flex justify-evenly items-center">
                     <li className="font-normal leading-relaxed font-raleway text-gray-300 text-base"><Link href="/demo">¿Qué hace?</Link></li>
                     <li className="font-normal leading-relaxed font-raleway text-gray-300 text-base"><Link href="/contact">Contacto</Link></li>
                     <li className="font-normal leading-relaxed font-raleway text-gray-300 text-base"><Link href="/service">Servicio</Link></li>
                     {status === "authenticated" ? (
-                        <li className="font-normal leading-relaxed font-raleway text-gray-300 text-base"><Link href="/profile">{session.user.name}</Link></li>
+                        <li className="font-normal leading-relaxed font-raleway text-gray-300 text-base"><Link className="w-full" href="/profile"><img className="rounded-xl w-1/2" src={session.user.image}/></Link></li>
                     ) : (
                         <li className="font-normal leading-relaxed font-raleway text-gray-300 text-base"><button onClick={() => signIn()}>Iniciar Sesión</button></li>
                     )}
