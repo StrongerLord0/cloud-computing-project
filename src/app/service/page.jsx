@@ -6,10 +6,9 @@ import {useSession} from 'next-auth/react'
 
 export default function About() {
 
-    const { data: session } = useSession();
+    const { data: session, status } = useSession();
     const videoRef = useRef(null);
     const [emotion, setEmotion] = useState('Toma una foto para analizarla...')
-    console.log(session.user._id)
 
     const takePhotoAndSend = () => {
 
@@ -44,25 +43,27 @@ export default function About() {
                             if (data) {
                                 if (!data.error) {
                                     setEmotion(data.result[0].dominant_emotion);
-                                    //Aqui se guarda la estadistica
-                                    fetch('/api/statistics', {
-                                        method: 'POST',
-                                        headers: {
-                                            'Content-Type': 'application/json',
-                                        },
-                                        body: JSON.stringify({
-                                            user: session.user._id,
-                                            emotion: data.result[0].dominant_emotion,
-                                            date: new Date().toISOString(), 
-                                        }),
-                                    })
-                                        .then(response => response.json())
-                                        .then(data => {
-                                            console.log('Success:', data);
+                                    if(status === 'authenticated'){
+                                        fetch('/api/statistics', {
+                                            method: 'POST',
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                            },
+                                            body: JSON.stringify({
+                                                user: session.user._id,
+                                                emotion: data.result[0].dominant_emotion,
+                                                date: new Date().toISOString(), 
+                                            }),
                                         })
-                                        .catch((error) => {
-                                            console.error('Error:', error);
-                                        });
+                                            .then(response => response.json())
+                                            .then(data => {
+                                                console.log('Success:', data);
+                                            })
+                                            .catch((error) => {
+                                                console.error('Error:', error);
+                                            });
+                                    }
+                                    
                                 } else {
                                     setEmotion(data.error);
                                 }
