@@ -11,7 +11,6 @@ export default function About() {
     const [emotion, setEmotion] = useState('Toma una foto para analizarla...')
 
     const takePhotoAndSend = () => {
-
         if (videoRef.current && videoRef.current.readyState === 4) { // Asegurarse de que el video esté listo
 
             const canvas = document.createElement('canvas');
@@ -26,7 +25,7 @@ export default function About() {
                 if (file.type.match('image.*')) {
                     const formData = new FormData();
                     formData.append("file", file);
-                    fetch(process.env.IA_URL, {
+                    fetch("/api/analyze", {
                         method: "POST",
                         body: formData,
                     })
