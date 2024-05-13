@@ -48,11 +48,7 @@ export default function About() {
                                             headers: {
                                                 'Content-Type': 'application/json',
                                             },
-                                            body: JSON.stringify({
-                                                user: session.user._id,
-                                                emotion: data.result[0].dominant_emotion,
-                                                date: new Date().toISOString(), 
-                                            }),
+                                            body: JSON.stringify({ user: session.user._id, emotion: data.result[0].dominant_emotion, date: new Date().toISOString() })
                                         })
                                             .then(response => response.json())
                                             .then(data => {
