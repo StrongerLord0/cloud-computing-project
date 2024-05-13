@@ -41,6 +41,7 @@ export default function About() {
                         .then(data => {
                             if (data) {
                                 if (!data.error) {
+                                    setEmotion(data.result[0].dominant_emotion);
                                     if(status === 'authenticated'){
                                         fetch('/api/statistics', {
                                             method: 'POST',
