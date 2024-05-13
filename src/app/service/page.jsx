@@ -42,7 +42,6 @@ export default function About() {
                             if (data) {
                                 if (!data.error) {
                                     if(status === 'authenticated'){
-                                        console.log(session.user._id, data.result[0].dominant_emotion, new Date().toISOString())
                                         fetch('/api/statistics', {
                                             method: 'POST',
                                             headers: {
