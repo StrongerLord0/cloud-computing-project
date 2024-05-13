@@ -13,6 +13,15 @@ const handler = NextAuth({
     }),
     // ...add more providers here
   ],
+  callbacks: {
+    async signIn({ user, account, profile, email, credentials }) {
+      return true;
+    },
+    async session({ session, token, user }) {
+      session.user._id = user.id;
+      return session;
+    },
+  },
   secret: process.env.SECRET
 })
 
