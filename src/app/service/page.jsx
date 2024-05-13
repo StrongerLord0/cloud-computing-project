@@ -41,18 +41,14 @@ export default function About() {
                         .then(data => {
                             if (data) {
                                 if (!data.error) {
-                                    setEmotion(data.result[0].dominant_emotion);
                                     if(status === 'authenticated'){
+                                        console.log(session.user._id, data.result[0].dominant_emotion, new Date().toISOString())
                                         fetch('/api/statistics', {
                                             method: 'POST',
                                             headers: {
                                                 'Content-Type': 'application/json',
                                             },
-                                            body: JSON.stringify({
-                                                user: session.user._id,
-                                                emotion: data.result[0].dominant_emotion,
-                                                date: new Date().toISOString(), 
-                                            }),
+                                            body: JSON.stringify({ user: session.user._id, emotion: data.result[0].dominant_emotion, date: new Date().toISOString() })
                                         })
                                             .then(response => response.json())
                                             .then(data => {
