@@ -25,7 +25,7 @@ export default function Profile() {
           animate={{ opacity: 1 }}
           transition={{ ease: 'easeInOut', duration: 1.2 }}
         >
-          <div className="flex w-1/3 h-4/5 flex-col text-center overflow-hidden text-white items-center justify-center border-r-gray-500 border-r-2">
+          <div className="flex w-1/4 h-5/6 flex-col text-center overflow-hidden text-white items-center justify-center border-r-gray-500 border-r-2">
             {session ? (
               <>
                 <img src={session.user.image.substring(0, session.user.image.lastIndexOf("="))} className="flex w-1/3 aspect-square rounded-3xl" />
@@ -49,7 +49,7 @@ export default function Profile() {
             ) : (<></>)
             }
             <div className="flex w-full gap-5 mt-4 items-center justify-center">
-              <button onClick={ () => { signOut({ callbackUrl: '/', redirect: true })}} className="w-auto py-2 px-3 bg-red-700 text-white leading-relaxed font-raleway rounded-lg shadow-md hover:bg-red-900">
+              <button onClick={() => { signOut({ callbackUrl: '/', redirect: true }) }} className="w-auto py-2 px-3 bg-red-700 text-white leading-relaxed font-raleway rounded-lg shadow-md hover:bg-red-900">
                 Cerrar Sesión
               </button>
               {session && session.user.email === ("adan10104334@gmail.com" || "adricoque.coqa@gmail.com") ?
@@ -60,8 +60,13 @@ export default function Profile() {
                 </>}
             </div>
           </div>
-          <div className="flex w-2/3 h-1/3 flex-col text-center text-white items-center">
-
+          <div className="flex w-3/4 h-5/6 text-center text-white items-center">
+            <div className="flex w-2/3 p-10 h-full border-r-gray-500 border-r-2">
+              
+            </div>
+            <div className="flex w-1/3 m-10 bg-white h-full">
+              a3
+            </div>
           </div>
         </motion.div>
       </div>
