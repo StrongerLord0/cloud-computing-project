@@ -8,7 +8,8 @@ export default function About() {
 
     const { data: session, status } = useSession();
     const videoRef = useRef(null);
-    const [emotion, setEmotion] = useState('Toma una foto para analizarla...')
+    const [emotion, setEmotion] = useState('Toma una foto para analizarla...');
+    const [tweets, setTweets] = useState([]);
 
     const takePhotoAndSend = () => {
         if (videoRef.current && videoRef.current.readyState === 4) { // Asegurarse de que el video esté listo
@@ -54,9 +55,30 @@ export default function About() {
                                                 date: new Date().toISOString(), 
                                             }),
                                         })
-                                            .then(response => response.json())
+                  
+                                        .then(response => response.json())
                                             .then(data => {
                                                 console.log('Success:', data);
+                                            })
+                                            .catch((error) => {
+                                                console.error('Error:', error);
+                                            });
+                                        
+                                            const body = { 'emotion': data.result[0].dominant_emotion};
+                                            console.log(JSON.stringify(body));
+
+                                            fetch('/api/tweets', {
+                                                method: 'POST',
+                                                headers: {
+                                                    'Content-Type': 'application/json',
+                                                },
+                                                body: JSON.stringify(body),
+                                            })
+                                            .then(response => response.json())
+                                            .then(data => {
+                                                setTweets(data.list);
+                                                console.log(data.list);
+                                                console.log(tweets);
                                             })
                                             .catch((error) => {
                                                 console.error('Error:', error);
@@ -149,27 +171,11 @@ export default function About() {
                     </div>
                     <div className="flex w-5/6 h-3/4 overflow-auto items-center text-center">
                         <div className="flex w-full flex-col text-md font-extralight leading-relaxed font-raleway text-gray-300">
-                            <p className="flex w-full justify-start text-left mt-10 mb-10">
-                                Espacio para webscraping
-                            </p>
-                            <p className="flex w-full justify-start text-left mt-10 mb-10">
-                                Espacio para webscraping
-                            </p>
-                            <p className="flex w-full justify-start text-left mt-10 mb-10">
-                                Espacio para webscraping
-                            </p>
-                            <p className="flex w-full justify-start text-left mt-10 mb-10">
-                                Espacio para webscraping
-                            </p>
-                            <p className="flex w-full justify-start text-left mt-10 mb-10">
-                                Espacio para webscraping
-                            </p>
-                            <p className="flex w-full justify-start text-left mt-10 mb-10">
-                                Espacio para webscraping
-                            </p>
-                            <p className="flex w-full justify-start text-left mt-10 mb-10">
-                                Espacio para webscraping
-                            </p>
+                            { tweets.map((tweet, index) => {
+                                <div key={index}>
+                                    {tweet.fullText}
+                                </div>
+                            })}
                         </div>
                         {/* Aquí puedes agregar el contenido adicional que será scrolleable */}
                     </div>
