@@ -18,7 +18,6 @@ export async function POST(req) {
     try {
       const formData = await req.formData();
       const file = formData.get('file');
-      console.log(file)
       // Aquí puedes enviar el archivo utilizando fetch o cualquier otra biblioteca que desees
 
       const response = await fetch(process.env.IA_URL, {
