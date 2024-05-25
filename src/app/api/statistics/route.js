@@ -51,12 +51,12 @@ export async function POST (request) {
 
     const uri = process.env.MONGO_URL; // Reemplaza <username> y <password> con tus credenciales
     const client = new MongoClient(uri);
-
+    const data = await request.json();
     try {
         await client.connect();
 
         const collection = client.db("ByOx").collection("statistics");
-        const stats = await collection.insertOne(request.body);
+        const stats = await collection.insertOne(data);
 
         return NextResponse.json(stats);
     } catch (error) {
