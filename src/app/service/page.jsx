@@ -57,8 +57,13 @@ export default function About() {
             }
 
             if (detectedEmotion !== 'No face detected in the image') {
-                clearInterval(intervalId);
-                setIntervalId(setInterval(takePhotoAndSend, 30000));
+                //clearInterval(intervalId);
+                //setIntervalId(setInterval(takePhotoAndSend, 30000));
+                clearTimeout(intervalId);
+                setIntervalId(setTimeout(takePhotoAndSend, 30000));
+            }else{
+                clearTimeout(intervalId);
+                setIntervalId(setTimeout(takePhotoAndSend, 5000));
             }
         } else {
             setEmotion(data.error || 'Error detecting emotion');
@@ -139,10 +144,16 @@ export default function About() {
         }
     }, []);
 
-    useEffect(() => {
-        const id = setInterval(takePhotoAndSend, 30000);
+    /*useEffect(() => {
+        const id = setInterval(takePhotoAndSend, 5000);
         setIntervalId(id);
         return () => clearInterval(id);
+    }, []);*/
+
+    useEffect(() => {
+        const id = setTimeout(takePhotoAndSend, 5000);
+        setIntervalId(id);
+        return () => clearTimeout(id);
     }, []);
 
     return (
@@ -169,7 +180,7 @@ export default function About() {
                         </button>
                         :
                         <button onClick={initializeCamera} className="mt-4 py-2 px-4 bg-gray-900 text-white leading-relaxed font-raleway rounded-lg shadow-md hover:bg-gray-700">
-                            Reinicar cámara
+                            Reiniciar cámara
                         </button>
                     }
                 </div>
