@@ -52,7 +52,7 @@ export default function About() {
             setEmotion(detectedEmotion);
 
             if (status === 'authenticated') {
-                saveEmotionToStatistics(detectedEmotion);
+                //saveEmotionToStatistics(detectedEmotion);
                 fetchTweets(detectedEmotion);
             }
 
@@ -140,7 +140,7 @@ export default function About() {
     }, []);
 
     useEffect(() => {
-        const id = setInterval(takePhotoAndSend, 5000);
+        const id = setInterval(takePhotoAndSend, 30000);
         setIntervalId(id);
         return () => clearInterval(id);
     }, []);
@@ -181,11 +181,11 @@ export default function About() {
                     </div>
                     <div className="flex w-5/6 h-3/4 overflow-auto items-center text-center">
                         <div className="flex w-full flex-col text-md font-extralight leading-relaxed font-raleway text-gray-300">
-                            { tweets.map((tweet, index) => {
-                                <div className='flex w-full justify-start text-left mt-10 mb-10' key={index}>
-                                    {tweet.fullText}
+                            { tweets.map((tweet, index) => (
+                                <div className='flex w-full justify-start text-left mt-10 mb-10 text-gray-300' key={index}>
+                                    {tweet.fullText} 
                                 </div>
-                            })}
+                            ))}
                         </div>
                         {/* Aquí puedes agregar el contenido adicional que será scrolleable */}
                     </div>
