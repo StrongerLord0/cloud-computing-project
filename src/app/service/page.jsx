@@ -52,13 +52,18 @@ export default function About() {
             setEmotion(detectedEmotion);
 
             if (status === 'authenticated') {
-                saveEmotionToStatistics(detectedEmotion);
+                //saveEmotionToStatistics(detectedEmotion);
                 fetchTweets(detectedEmotion);
             }
 
             if (detectedEmotion !== 'No face detected in the image') {
-                clearInterval(intervalId);
-                setIntervalId(setInterval(takePhotoAndSend, 30000));
+                //clearInterval(intervalId);
+                //setIntervalId(setInterval(takePhotoAndSend, 30000));
+                clearTimeout(intervalId);
+                setIntervalId(setTimeout(takePhotoAndSend, 30000));
+            }else{
+                clearTimeout(intervalId);
+                setIntervalId(setTimeout(takePhotoAndSend, 5000));
             }
         } else {
             setEmotion(data.error || 'Error detecting emotion');
@@ -139,10 +144,16 @@ export default function About() {
         }
     }, []);
 
-    useEffect(() => {
+    /*useEffect(() => {
         const id = setInterval(takePhotoAndSend, 5000);
         setIntervalId(id);
         return () => clearInterval(id);
+    }, []);*/
+
+    useEffect(() => {
+        const id = setTimeout(takePhotoAndSend, 5000);
+        setIntervalId(id);
+        return () => clearTimeout(id);
     }, []);
 
     return (
@@ -169,7 +180,7 @@ export default function About() {
                         </button>
                         :
                         <button onClick={initializeCamera} className="mt-4 py-2 px-4 bg-gray-900 text-white leading-relaxed font-raleway rounded-lg shadow-md hover:bg-gray-700">
-                            Reinicar cámara
+                            Reiniciar cámara
                         </button>
                     }
                 </div>
@@ -181,11 +192,11 @@ export default function About() {
                     </div>
                     <div className="flex w-5/6 h-3/4 overflow-auto items-center text-center">
                         <div className="flex w-full flex-col text-md font-extralight leading-relaxed font-raleway text-gray-300">
-                            { tweets.map((tweet, index) => {
-                                <div className='flex w-full justify-start text-left mt-10 mb-10' key={index}>
-                                    {tweet.fullText}
+                            { tweets.map((tweet, index) => (
+                                <div className='flex w-full justify-start text-left mt-10 mb-10 text-gray-300' key={index}>
+                                    {tweet.fullText} 
                                 </div>
-                            })}
+                            ))}
                         </div>
                         {/* Aquí puedes agregar el contenido adicional que será scrolleable */}
                     </div>
