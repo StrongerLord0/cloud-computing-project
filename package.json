@@ -20,7 +20,8 @@
     "next-auth": "^4.24.7",
     "node-fetch": "^3.3.2",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "rettiwt-api": "^3.0.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.4.2",

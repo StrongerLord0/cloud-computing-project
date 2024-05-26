@@ -8,75 +8,110 @@ export default function About() {
 
     const { data: session, status } = useSession();
     const videoRef = useRef(null);
-    const [emotion, setEmotion] = useState('Toma una foto para analizarla...')
+    const [emotion, setEmotion] = useState('Toma una foto para analizarla...');
+    const [tweets, setTweets] = useState([]);
+    const [intervalId, setIntervalId] = useState(null);
 
-    const takePhotoAndSend = () => {
-        if (videoRef.current && videoRef.current.readyState === 4) { // Asegurarse de que el video esté listo
-
+    const takePhotoAndSend = async () => {
+        if (videoRef.current && videoRef.current.readyState === 4) {
             const canvas = document.createElement('canvas');
             canvas.width = videoRef.current.videoWidth;
             canvas.height = videoRef.current.videoHeight;
             const context = canvas.getContext('2d');
             context.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
 
-            canvas.toBlob(blob => {
-                const file = new File([blob], "photo.png", { type: "image/png" });
+            const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+            const file = new File([blob], "photo.png", { type: "image/png" });
 
-                if (file.type.match('image.*')) {
-                    const formData = new FormData();
-                    formData.append("file", file);
-                    fetch("/api/analyze", {
+            if (file.type.match('image.*')) {
+                const formData = new FormData();
+                formData.append("file", file);
+
+                try {
+                    const response = await fetch("/api/analyze", {
                         method: "POST",
                         body: formData,
-                    })
-                        .then(response => {
-                            if (!response.ok) {
-                                if (response.status === 400) {
-                                    // Manejo específico para el error 400, por ejemplo, establecer un estado.
-                                    return; // Detiene la ejecución adicional para este caso.
-                                }
-                            }
-                            return response.json();
-                        })
-                        .then(data => {
-                            if (data) {
-                                if (!data.error) {
-                                    setEmotion(data.result[0].dominant_emotion);
-                                    if(status === 'authenticated'){
-                                        fetch('/api/statistics', {
-                                            method: 'POST',
-                                            headers: {
-                                                'Content-Type': 'application/json',
-                                            },
-                                            body: JSON.stringify({ user: session.user._id, emotion: data.result[0].dominant_emotion, date: new Date().toISOString() })
-                                        })
-                                            .then(response => response.json())
-                                            .then(data => {
-                                                console.log('Success:', data);
-                                            })
-                                            .catch((error) => {
-                                                console.error('Error:', error);
-                                            });
-                                    }
-                                    
-                                } else {
-                                    setEmotion(data.error);
-                                }
-                                if (data.result[0].dominant_emotion != 'No face detected...') {
-                                    videoRef.current.pause();
-                                }
-                            }
-                            else {
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Fetch error:', error);
-                        });
-                } else {
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        handleEmotionDetection(data);
+                    } else {
+                        console.error('Error:', response.status);
+                    }
+                } catch (error) {
+                    console.error('Fetch error:', error);
                 }
-            }, 'image/png');
+            }
         }
-    }
+    };
+
+    const handleEmotionDetection = (data) => {
+        if (data && !data.error) {
+            const detectedEmotion = data.result[0].dominant_emotion;
+            setEmotion(detectedEmotion);
+
+            if (status === 'authenticated') {
+                //saveEmotionToStatistics(detectedEmotion);
+                fetchTweets(detectedEmotion);
+            }
+
+            if (detectedEmotion !== 'No face detected in the image') {
+                //clearInterval(intervalId);
+                //setIntervalId(setInterval(takePhotoAndSend, 30000));
+                clearTimeout(intervalId);
+                setIntervalId(setTimeout(takePhotoAndSend, 30000));
+            }else{
+                clearTimeout(intervalId);
+                setIntervalId(setTimeout(takePhotoAndSend, 5000));
+            }
+        } else {
+            setEmotion(data.error || 'Error detecting emotion');
+        }
+    };
+
+    const saveEmotionToStatistics = async (detectedEmotion) => {
+        try {
+            const response = await fetch('/api/statistics', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    user: session.user._id,
+                    emotion: detectedEmotion,
+                    date: new Date().toISOString(),
+                }),
+            });
+
+            if (!response.ok) {
+                console.error('Error saving statistics:', response.status);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
+    const fetchTweets = async (detectedEmotion) => {
+        try {
+            const response = await fetch('/api/tweets', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ emotion: detectedEmotion }),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setTweets(data.list);
+            } else {
+                console.error('Error fetching tweets:', response.status);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
 
     const initializeCamera = () => {
         videoRef.current.play();
@@ -109,6 +144,18 @@ export default function About() {
         }
     }, []);
 
+    /*useEffect(() => {
+        const id = setInterval(takePhotoAndSend, 5000);
+        setIntervalId(id);
+        return () => clearInterval(id);
+    }, []);*/
+
+    useEffect(() => {
+        const id = setTimeout(takePhotoAndSend, 5000);
+        setIntervalId(id);
+        return () => clearTimeout(id);
+    }, []);
+
     return (
         <div
             className="flex w-screen h-screen flex-col bg-cover items-center"
@@ -133,7 +180,7 @@ export default function About() {
                         </button>
                         :
                         <button onClick={initializeCamera} className="mt-4 py-2 px-4 bg-gray-900 text-white leading-relaxed font-raleway rounded-lg shadow-md hover:bg-gray-700">
-                            Reinicar cámara
+                            Reiniciar cámara
                         </button>
                     }
                 </div>
@@ -145,27 +192,11 @@ export default function About() {
                     </div>
                     <div className="flex w-5/6 h-3/4 overflow-auto items-center text-center">
                         <div className="flex w-full flex-col text-md font-extralight leading-relaxed font-raleway text-gray-300">
-                            <p className="flex w-full justify-start text-left mt-10 mb-10">
-                                Espacio para webscraping
-                            </p>
-                            <p className="flex w-full justify-start text-left mt-10 mb-10">
-                                Espacio para webscraping
-                            </p>
-                            <p className="flex w-full justify-start text-left mt-10 mb-10">
-                                Espacio para webscraping
-                            </p>
-                            <p className="flex w-full justify-start text-left mt-10 mb-10">
-                                Espacio para webscraping
-                            </p>
-                            <p className="flex w-full justify-start text-left mt-10 mb-10">
-                                Espacio para webscraping
-                            </p>
-                            <p className="flex w-full justify-start text-left mt-10 mb-10">
-                                Espacio para webscraping
-                            </p>
-                            <p className="flex w-full justify-start text-left mt-10 mb-10">
-                                Espacio para webscraping
-                            </p>
+                            { tweets.map((tweet, index) => (
+                                <div className='flex w-full justify-start text-left mt-10 mb-10 text-gray-300' key={index}>
+                                    {tweet.fullText} 
+                                </div>
+                            ))}
                         </div>
                         {/* Aquí puedes agregar el contenido adicional que será scrolleable */}
                     </div>
