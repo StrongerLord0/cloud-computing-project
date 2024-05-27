@@ -11,7 +11,7 @@ export default function Navigation() {
     const { data: session, status } = useSession();
 
     return (
-        <>
+        <div className="flex w-full h-24 items-center justify-items-start">
             <div className="pt-2 pb-2 pl-5 h-5/6 w-2/3 ml-auto hidden lg:flex">
                 <button>
                     <Link href="/">
@@ -25,12 +25,12 @@ export default function Navigation() {
                     <li className="font-normal leading-relaxed font-raleway text-gray-300 text-base"><Link href="/contact">Contacto</Link></li>
                     <li className="font-normal leading-relaxed font-raleway text-gray-300 text-base"><Link href="/service">Servicio</Link></li>
                     {status === "authenticated" ? (
-                        <li className="font-normal leading-relaxed font-raleway text-gray-300 text-base"><Link className="w-full" href="/profile"><img className="rounded-xl w-1/2" src={session.user.image}/></Link></li>
+                        <li className="font-normal leading-relaxed font-raleway text-gray-300 text-base"><Link className="w-full" href="/profile"><img className="rounded-xl w-1/2" src={session.user.image} /></Link></li>
                     ) : (
                         <li className="font-normal leading-relaxed font-raleway text-gray-300 text-base"><button onClick={() => signIn()}>Iniciar Sesión</button></li>
                     )}
                 </ul>
             </nav>
-        </>
+        </div>
     )
 }

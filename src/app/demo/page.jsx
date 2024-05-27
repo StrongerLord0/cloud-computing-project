@@ -8,17 +8,16 @@ export default function WhatDoes() {
             className="flex w-screen h-screen flex-col bg-cover items-center"
             style={{ background: "radial-gradient(37.24% 60.39% at 53.49% 33.24%, #020A20 0%, #010309 59.81%, #000 100%, #000 100%)" }}
         >
-            <div className="flex w-full h-1/6 items-center justify-items-start">
-                <Navigation />
-            </div>
+            <Navigation />
+
             <motion.div
-                className="flex w-full h-2/3 items-center text-center"
+                className="flex w-full h-full mb-20 items-center text-center"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ ease: 'easeInOut', duration: 1.2 }}
             >
                 <div className="flex w-1/2 h-full flex-col text-center overflow-hidden text-white justify-center items-center">
-                    <img className="w-2/3 h-full object-cover object-center transform rounded-3xl" src="https://c.pxhere.com/images/97/ad/93c005dcd7f716ebcea0e66fd4f1-1457317.jpg!d"/>
+                    <img className="w-2/3 h-full object-cover object-center transform rounded-3xl" src="https://c.pxhere.com/images/97/ad/93c005dcd7f716ebcea0e66fd4f1-1457317.jpg!d" />
                 </div>
                 <div className="flex w-1/2 h-full flex-col text-center text-white items-center justify-center">
                     <p className="w-2/3 text-2xl font-extralight leading-relaxed font-raleway text-gray-300">
