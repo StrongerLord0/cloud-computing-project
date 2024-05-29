@@ -7,6 +7,12 @@ import Image from 'next/image';
 import boxPNG from '../../public/bOx.png';
 import { signIn } from 'next-auth/react';
 import { useSession } from "next-auth/react";
+import { motion } from 'framer-motion'
+
+const navItemVariants = {
+    hidden: { opacity: 0.5, scale: 1 },
+    visible: { opacity: 1, scale: 1 },
+};
 
 export default function Navigation() {
 
@@ -14,7 +20,7 @@ export default function Navigation() {
     const { data: session, status } = useSession();
 
     return (
-        <div className="flex w-full h-24 items-center justify-items-start">
+        <div className="flex w-full h-32 items-center justify-items-start">
             <div className="pt-2 pb-2 pl-5 h-5/6 w-2/3 ml-auto hidden lg:flex">
                 <button>
                     <Link href="/">
@@ -24,19 +30,55 @@ export default function Navigation() {
             </div>
             <nav className="w-full lg:w-1/3 ml-auto flex items-center">
                 <ul className="w-full lg:w-full flex justify-evenly items-center">
-                    <li className={`font-normal leading-relaxed font-raleway text-gray-300 text-base ${pathname === '/demo' ? 'border-b-2 border-gray-300 opacity-100' : 'opacity-50'}`}>
+                    <motion.li
+                        className={`font-normal leading-relaxed font-raleway text-gray-300 text-base ${pathname === '/demo' ? 'border-b-2 border-gray-300' : ''}`}
+                        initial="hidden"
+                        animate={pathname === '/demo' ? 'visible' : 'hidden'}
+                        variants={navItemVariants}
+                        transition={{ duration: 0.3 }}
+                    >
                         <Link className="p-2" href="/demo">Propósito</Link>
-                    </li>
-                    <li className={`font-normal leading-relaxed font-raleway text-gray-300 text-base ${pathname === '/service' ? 'border-b-2 border-gray-300 opacity-100' : 'opacity-50'}`}>
+                    </motion.li>
+                    <motion.li
+                        className={`font-normal leading-relaxed font-raleway text-gray-300 text-base ${pathname === '/service' ? 'border-b-2 border-gray-300' : ''}`}
+                        initial="hidden"
+                        animate={pathname === '/service' ? 'visible' : 'hidden'}
+                        variants={navItemVariants}
+                        transition={{ duration: 0.3 }}
+                    >
                         <Link className="p-2" href="/service">Servicio</Link>
-                    </li>
+                    </motion.li>
                     {status === "authenticated" ? (
-                        <li className="font-normal leading-relaxed font-raleway text-gray-300 text-base"><Link className="w-full" href="/profile"><img className={`rounded-xl w-1/2 ${pathname === '/profile' ? 'opacity-100' : 'opacity-50'} `} src={session.user.image} /></Link></li>
+                        <motion.li
+                            className="font-normal leading-relaxed font-raleway text-gray-300 text-base"
+                            initial="hidden"
+                            animate={pathname === '/profile' ? 'visible' : 'hidden'}
+                            variants={navItemVariants}
+                            transition={{ duration: 0.3 }}
+                        >
+                            <Link className="w-full" href="/profile">
+                                <motion.img
+                                    className="rounded-full w-1/2"
+                                    src={session.user.image}
+                                    initial={{ opacity: 0.5, scale: 1 }}
+                                    animate={{ opacity: pathname === '/profile' ? 1 : 0.5, scale: pathname === '/profile' ? 1 : 1 }}
+                                    transition={{ duration: 0.3 }}
+                                />
+                            </Link>
+                        </motion.li>
                     ) : (
-                        <li className="font-normal leading-relaxed font-raleway text-gray-300 text-base opacity-50"><button onClick={() => signIn()}>Iniciar Sesión</button></li>
+                        <motion.li
+                            className="font-normal leading-relaxed font-raleway text-gray-300 text-base opacity-50"
+                            initial="hidden"
+                            animate="visible"
+                            variants={navItemVariants}
+                            transition={{ duration: 0.3 }}
+                        >
+                            <button onClick={() => signIn()}>Iniciar Sesión</button>
+                        </motion.li>
                     )}
                 </ul>
             </nav>
         </div>
-    )
+    );
 }

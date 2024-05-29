@@ -1,9 +1,10 @@
 "use client"
 import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Navigation from "../../components/navigation"
+import Navigation from "@/components/navigation"
 import { useSession } from 'next-auth/react'
 import { format, parseISO } from 'date-fns';
+import EmotionsBar from '@/components/emotionsBar';
 
 
 export default function About() {
@@ -48,9 +49,27 @@ export default function About() {
         }
     };
 
+    const translateEmotion = (emotion) => {
+        let result;
+        if(emotion === 'angry'){
+            return 'Enojo';
+        } else if(emotion === 'disgust'){
+            return 'Disgusto';
+        } else if(emotion === 'fear'){
+            return 'Temor';
+        } else if(emotion === 'happy'){
+            return 'Feliz';
+        } else if(emotion === 'neutral'){
+            return 'Neutral';
+        } else if(emotion === 'sad'){
+            return 'Triste';
+        } else if(emotion === 'surprise'){
+            return 'Sorpresa'
+        }
+    }
     const handleEmotionDetection = (data) => {
         if (data && !data.error) {
-            const detectedEmotion = data.result[0].dominant_emotion;
+            const detectedEmotion = translateEmotion(data.result[0].dominant_emotion);
             setEmotion(detectedEmotion);
             fetchHashtagInterpreter(data.result[0].emotion);
             console.log('Hola');
@@ -192,24 +211,36 @@ export default function About() {
             <Navigation />
 
             <motion.div
-                className="flex w-full h-5/6 items-center text-center"
+                className="flex w-full h-4/6 items-center text-center"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ ease: 'easeInOut', duration: 1.2 }}
             >
-                <div className="flex w-1/3 h-4/5 flex-col text-center text-white items-center">
-                    <div id="video-container" className="flex aspect-[3/4] overflow-hidden items-center text-center rounded-lg">
-
+                <div className="flex w-1/3 h-full flex-col text-center text-white items-center">
+                    <div id="video-container" className="w-1/4 aspect-[3/5] overflow-hidden items-center text-center rounded-lg">
                     </div>
-                    {emotion === 'No face detected...' || emotion === 'Toma una foto para analizarla...' || emotion === '' ?
-                        <button onClick={takePhotoAndSend} className="mt-4 py-2 px-4 bg-gray-900 text-white leading-relaxed font-raleway rounded-lg shadow-md hover:bg-gray-700">
-                            Tomar foto y analizar
-                        </button>
+                    {emotion === 'No face detected in the image' || emotion === 'Toma una foto para analizarla...' || emotion === '' ?
+                        <>
+                            <div>
+                                <button onClick={takePhotoAndSend} className="mt-6 py-1 px-10 bg-zinc-800 text-white leading-relaxed font-raleway rounded-lg shadow-md hover:bg-gray-700">
+                                    Tomar foto
+                                </button>
+                            </div>
+                            <div className="py-5 w-full h-1/6 overflow-hidden items-center text-center text-md text-gray-300">
+                                Aún no se han detectado emociones
+                            </div>
+                        </>
                         :
-                        <button onClick={initializeCamera} className="mt-4 py-2 px-4 bg-gray-900 text-white leading-relaxed font-raleway rounded-lg shadow-md hover:bg-gray-700">
-                            Reiniciar cámara
-                        </button>
+                        <>
+                            <button onClick={initializeCamera} className="mt-6 py-1 px-5 bg-zinc-800 text-white leading-relaxed font-raleway rounded-lg shadow-md hover:bg-gray-700">
+                                Reiniciar cámara
+                            </button>
+                            <div className="py-5 w-full h-1/6 overflow-hidden items-center text-center text-md text-gray-300">
+                                Emoción: {emotion}
+                            </div>
+                        </>
                     }
+                <EmotionsBar/>
                 </div>
                 <div className="flex w-2/3 h-full flex-col text-center text-white items-center">
                     <div className="flex w-5/6 justify-end pb-3">
