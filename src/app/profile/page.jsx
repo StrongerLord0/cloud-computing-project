@@ -14,7 +14,7 @@ export default function Profile() {
     <>
       <div
         className="flex w-screen h-screen flex-col bg-cover items-center"
-        style={{ background: "radial-gradient(37.24% 60.39% at 53.49% 33.24%, #020A20 0%, #010309 59.81%, #000 100%, #000 100%)" }}
+        style={{ background: "radial-gradient(37.24% 60.39% at 53.49% 33.24%, #0E0F12 0%, #08090B 22%, #000 86.5%, #000 89%" }}
       >
           <Navigation />
        
