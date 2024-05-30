@@ -8,9 +8,7 @@
 
 ## Descripción
 
-Proyecto utilizando NextJS 14, MongoDB, Google Cloud (posible), Respell (posible), AWS (posible)
+Proyecto utilizando NextJS 14, MongoDB, Rettiwt API, OpenAI.
 
-Se empleará extracción de datos en base a imágenes por IA  
-Personalización de experiencia en base a estados de ánimo (cámara)  
-Posible webscraping en base a emociones (idea dominante hasta el momento)  
+Permite evaluar las emociones del usuario y personalizar la experiencia del usuario adaptando los filtros de obtención de Twitts.
  
