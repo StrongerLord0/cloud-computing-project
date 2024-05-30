@@ -3,11 +3,17 @@ import { motion } from 'framer-motion';
 import Navigation from "../../components/navigation"
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from 'react';
+import { useAppContext } from '@/context/AppContext';
+import Link from 'next/link';
 
 export default function Profile() {
-
+    const { setSharedData } = useAppContext();
     const { data: session, status } = useSession();
     const [users, setUsers] = useState([]);
+
+    const handleClick = (user) => {
+        setSharedData(user);
+    }
 
     useEffect(() => {
         getUsers() // Llama a getUsers
@@ -31,45 +37,50 @@ export default function Profile() {
     return (
         <div
             className="flex w-screen h-screen flex-col bg-cover items-center"
-            style={{ background: "radial-gradient(37.24% 60.39% at 53.49% 33.24%, #020A20 0%, #010309 59.81%, #000 100%, #000 100%)" }}
+            style={{ background: "radial-gradient(37.24% 60.39% at 53.49% 33.24%, #0E0F12 0%, #08090B 22%, #000 86.5%, #000 89%" }}
         >
             <Navigation />
 
             <motion.div
-                className="flex w-1/2 h-full items-center text-center"
+                className="flex w-1/2 h-2/3 items-center text-center"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ ease: 'easeInOut', duration: 1.2 }}
             >
                 {session && session.user.email === ("adan10104334@gmail.com" || "adricoque.coqa@gmail.com") ? (
-                    <div className="flex w-full h-4/5 flex-col text-center text-white">
-                        <h1 className="flex text-4xl font-normal font-raleway text-gray-300">Lista de usuarios ({users.length})</h1>
+                    <div className="flex w-full h-full flex-col text-center text-white">
+                        <h1 className="flex text-4xl font-normal font-raleway text-gray-300">Seleccione un usuario ({users.length})</h1>
                         <div className="flex w-full h-full flex-col text-center text-white overflow-y-auto scrollbar scrollbar-thin scrollbar-thumb-gray-900 scrollbar-track-gray-100">
                             <table>
                                 {users &&
                                     users.map(user => (
-                                        <tr key={user._id}>
-                                            <td>{user.name}</td>
-                                            <td>{user.email}</td>
-                                            <td
+                                        <Link href='profile'>
+                                            <button className='w-full h-1/6 flex flex-wrap items-center' key={user._id} onClick={() => handleClick(user)}>
+                                            <div className='w-4/5 h-full flex flex-wrap justify-center items-center'>
+                                                <div className="flex w-1/2 h-full">{user.name}</div>
+                                                <div className='flex w-1/2 h-full'>{user.email}</div>
+                                            </div>
+                                            <div
                                                 style={{
                                                     '--image-url': `url(${user.image})`,
-                                                    backgroundSize: 'cover', // Asegura que la imagen cubra todo el espacio disponible
-                                                    backgroundPosition: 'center', // Centra la imagen en el elemento
-                                                    height: '100px', // Define la altura del elemento
-                                                    width: '100px' // Define la anchura del elemento
+                                                    backgroundSize: 'cover',
+                                                    backgroundPosition: 'center',
+                                                    height: '100px',
+                                                    width: '100px'
                                                 }}
-                                                className="bg-[image:var(--image-url)]"
+                                                className="flex items-end w-1/3 justify-end text-end bg-[image:var(--image-url)]"
                                             />
-                                        </tr>
+                                        </button>
+                                        </Link>
                                     ))}
-                            </table>
-                        </div>
+                        </table>
                     </div>
-                ) : (
-                    <></>
-                )}
-            </motion.div>
+                    </div>
+    ) : (
+        <></>
+    )
+}
+            </motion.div >
         </div >
     )
 }
