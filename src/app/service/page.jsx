@@ -3,10 +3,9 @@ import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navigation from "@/components/navigation";
 import { useSession } from 'next-auth/react';
-import { format, parseISO, locale } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import es from 'date-fns/locale/es';
 import EmotionsBar from '@/components/emotionsBar';
-
 
 export default function About() {
 
@@ -14,18 +13,15 @@ export default function About() {
     const videoRef = useRef(null);
     const [emotion, setEmotion] = useState('Toma una foto para analizarla...');
     const [tweets, setTweets] = useState([]);
-    const [intervalId, setIntervalId] = useState(null);
     const [emotionJson, setEmotionJson] = useState({});
 
     const today = new Date();
     const formattedDate = format(today, "EEEE, dd 'de' MMMM, yyyy", { locale: es });
 
-    // Función para capitalizar la primera letra de una cadena
     const capitalizeFirstLetter = (string) => {
         return string.charAt(0).toUpperCase() + string.slice(1);
     };
 
-    // Capitalizar la primera letra del día y del mes
     const [day, rest] = formattedDate.split(',');
     const [date, monthYear] = rest.split('de');
     const formattedDay = capitalizeFirstLetter(day.trim());
@@ -98,28 +94,19 @@ export default function About() {
         } else if (emotion === 'sad') {
             return 'Triste';
         } else if (emotion === 'surprise') {
-            return 'Sorpresa'
+            return 'Sorpresa';
         }
     }
+
     const handleEmotionDetection = (data) => {
         if (data && !data.error) {
             const detectedEmotion = translateEmotion(data.result[0].dominant_emotion);
-            const transformedData = transformEmotionsData(data.result[0].emotion)
+            const transformedData = transformEmotionsData(data.result[0].emotion);
             setEmotionJson(transformedData);
             setEmotion(detectedEmotion);
             saveEmotionToStatistics(data.result[0].dominant_emotion);
             fetchHashtagInterpreter(data.result[0].emotion);
             console.log(data);
-
-            if (detectedEmotion !== 'No face detected in the image') {
-                //clearInterval(intervalId);
-                //setIntervalId(setInterval(takePhotoAndSend, 30000));
-                clearTimeout(intervalId);
-                setIntervalId(setTimeout(takePhotoAndSend, 30000));
-            } else {
-                clearTimeout(intervalId);
-                setIntervalId(setTimeout(takePhotoAndSend, 5000));
-            }
         } else {
             setEmotion(data.error || 'Error detecting emotion');
         }
@@ -188,7 +175,7 @@ export default function About() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ hashtags: hashtags }), // Asegúrate de que tu API pueda manejar esta propiedad
+                body: JSON.stringify({ hashtags: hashtags }),
             });
 
             if (response.ok) {
@@ -233,12 +220,6 @@ export default function About() {
         }
     }, []);
 
-    useEffect(() => {
-        const id = setTimeout(takePhotoAndSend, 5000);
-        setIntervalId(id);
-        return () => clearTimeout(id);
-    }, []);
-
     return (
         <div
             className="flex w-screen h-screen flex-col bg-cover items-center"
@@ -253,7 +234,7 @@ export default function About() {
                 transition={{ ease: 'easeInOut', duration: 1.2 }}
             >
                 <div className="flex w-1/3 h-full flex-col text-center text-white items-center justify-start border-r-4 border-r-zinc-900">
-                    <div id="video-container" className="w-1/3 aspect-[3/5] overflow-hidden items-center text-center rounded-lg"></div>
+                    <div id="video-container" className="w-1/3 aspect-[2/3] overflow-hidden items-center text-center rounded-lg"></div>
                     {emotion === 'No face detected in the image' || emotion === 'Toma una foto para analizarla...' || emotion === '' ? (
                         <>
                             <div className="py-5 w-full overflow-hidden items-center text-center text-md text-gray-300">
@@ -267,6 +248,12 @@ export default function About() {
                             </div>
                         </>
                     )}
+                    <button
+                        onClick={() => {takePhotoAndSend()}}
+                        className="mb-4 px-4 py-1 bg-zinc-900 text-white rounded-md hover:bg-zinc-800 transition"
+                    >
+                        Tomar foto
+                    </button>
                     <EmotionsBar emotions={emotionJson} />
                 </div>
 
