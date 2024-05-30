@@ -15,7 +15,7 @@ export default function About() {
     const [emotion, setEmotion] = useState('Toma una foto para analizarla...');
     const [tweets, setTweets] = useState([]);
     const [intervalId, setIntervalId] = useState(null);
-    const [emotionJson, setEmotionJson] = useState('');
+    const [emotionJson, setEmotionJson] = useState({});
 
     const today = new Date();
     const formattedDate = format(today, "EEEE, dd 'de' MMMM, yyyy", { locale: es });
@@ -252,8 +252,8 @@ export default function About() {
                 animate={{ opacity: 1 }}
                 transition={{ ease: 'easeInOut', duration: 1.2 }}
             >
-                <div className="flex w-1/3 h-screen flex-col text-center text-white items-center justify-center border-r-4 border-r-zinc-900">
-                    <div id="video-container" className="w-1/4 aspect-[3/5] overflow-hidden items-center text-center rounded-lg"></div>
+                <div className="flex w-1/3 h-full flex-col text-center text-white items-center justify-start border-r-4 border-r-zinc-900">
+                    <div id="video-container" className="w-1/3 aspect-[3/5] overflow-hidden items-center text-center rounded-lg"></div>
                     {emotion === 'No face detected in the image' || emotion === 'Toma una foto para analizarla...' || emotion === '' ? (
                         <>
                             <div className="py-5 w-full overflow-hidden items-center text-center text-md text-gray-300">

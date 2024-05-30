@@ -21,7 +21,9 @@
     "next-auth": "^4.24.7",
     "node-fetch": "^3.3.2",
     "react": "^18",
+    "react-datepicker": "^6.9.0",
     "react-dom": "^18",
+    "recharts": "^2.12.7",
     "rettiwt-api": "^3.0.0"
   },
   "devDependencies": {

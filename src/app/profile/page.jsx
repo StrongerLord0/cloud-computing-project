@@ -1,74 +1,147 @@
 "use client"
-import React from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { motion } from 'framer-motion';
 import Navigation from "../../components/navigation";
 import { useSession } from "next-auth/react";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
+import EmotionsHistogram from "@/components/charts/EmotionsHistogram";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { parseISO, isSameDay, format} from "date-fns";
+import { es } from 'date-fns/locale';
 
 export default function Profile() {
+  const { data: session } = useSession();
+  const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [maxDetections, setMaxDetections] = useState([]);
+  const datePickerRef = useRef();
 
-  const { data: session, status } = useSession();
+  const countEmotionsByDay = (emotions) => {
+    const emotionCounts = { Enojo: 0, Disgusto: 0, Temor: 0, Feliz: 0, Neutral: 0, Triste: 0, Sorpresa: 0 };
+
+    emotions.forEach(item => {
+      const emotion = translateEmotion(item.emotion);
+      emotionCounts[emotion]++;
+    });
+
+    return Object.keys(emotionCounts).map(emotion => ({
+      name: emotion,
+      Detecciones: emotionCounts[emotion]
+    }));
+  };
+
+  const translateEmotion = (emotion) => {
+    switch (emotion) {
+      case 'angry': return 'Enojo';
+      case 'disgust': return 'Disgusto';
+      case 'fear': return 'Temor';
+      case 'happy': return 'Feliz';
+      case 'neutral': return 'Neutral';
+      case 'sad': return 'Triste';
+      case 'surprise': return 'Sorpresa';
+      default: return 'Desconocido';
+    }
+  };
+
+  const fetchPersonalStats = async () => {
+    const response = await fetch(`/api/statistics/`, { method: "GET" });
+
+    if (response.ok) {
+      const data = await response.json();
+      setData(data);
+      setFilteredData(data); // Inicialmente mostramos todos los datos
+      const emotionsByDay = countEmotionsByDay(data);
+      const maxDetectionsValue = Math.max(...emotionsByDay.map(item => item.Detecciones));
+      setMaxDetections(Array.from({ length: maxDetectionsValue + 1 }, (_, i) => i));
+    } else {
+      console.error('Error:', response.status);
+    }
+  };
+
+  useEffect(() => {
+    fetchPersonalStats();
+  }, []);
+
+  useEffect(() => {
+    if (selectedDate) {
+      const filtered = data.filter(item => isSameDay(parseISO(item.date), selectedDate));
+      setFilteredData(filtered);
+      const emotionsByDay = countEmotionsByDay(filtered);
+      const maxDetectionsValue = Math.max(...emotionsByDay.map(item => item.Detecciones));
+      setMaxDetections(Array.from({ length: maxDetectionsValue + 1 }, (_, i) => i));
+    } else {
+      setFilteredData(data);
+      const emotionsByDay = countEmotionsByDay(data);
+      const maxDetectionsValue = Math.max(...emotionsByDay.map(item => item.Detecciones));
+      setMaxDetections(Array.from({ length: maxDetectionsValue + 1 }, (_, i) => i));
+    }
+  }, [selectedDate, data]);
 
   return (
-    <>
-      <div
-        className="flex w-screen h-screen flex-col bg-cover items-center"
-        style={{ background: "radial-gradient(37.24% 60.39% at 53.49% 33.24%, #0E0F12 0%, #08090B 22%, #000 86.5%, #000 89%" }}
+    <div
+      className="flex w-screen h-screen flex-col bg-cover items-center"
+      style={{ background: "radial-gradient(37.24% 60.39% at 53.49% 33.24%, #0E0F12 0%, #08090B 22%, #000 86.5%, #000 89%" }}
+    >
+      <Navigation />
+      <motion.div
+        className="flex w-full h-full items-center text-center"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ ease: 'easeInOut', duration: 1.2 }}
       >
-          <Navigation />
-       
-        <motion.div
-          className="flex w-full h-full mb-20 items-center text-center"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ ease: 'easeInOut', duration: 1.2 }}
-        >
-          <div className="flex w-1/4 h-5/6 flex-col text-center overflow-hidden text-white items-center justify-center border-r-gray-500 border-r-2">
-            {session ? (
-              <>
-                <img src={session.user.image.substring(0, session.user.image.lastIndexOf("="))} className="flex w-1/3 aspect-square rounded-3xl" />
-                <p className="w-2/3 pt-10 text-md font-extralight leading-relaxed font-raleway text-gray-300">
-                  {session.user.email}
-                </p>
-                <p className="w-2/3 pt-4 text-md font-extralight leading-relaxed font-raleway text-gray-300">
-                  {session.user.name}
-                </p>
-                <p className="w-2/3 pt-4 text-md font-extralight leading-relaxed font-raleway text-gray-300">
-                  {'Expira el ' + new Date(session.expires).toLocaleDateString('es-ES', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit'
-                  })}
-                </p>
-              </>
-            ) : (<></>)
-            }
-            <div className="flex w-full gap-5 mt-4 items-center justify-center">
-              <button onClick={() => { signOut({ callbackUrl: '/', redirect: true }) }} className="w-auto py-2 px-3 bg-red-700 text-white leading-relaxed font-raleway rounded-lg shadow-md hover:bg-red-900">
-                Cerrar Sesión
+        <div className="flex w-1/3 h-full flex-col text-center text-white items-center justify-start border-r-4 border-r-zinc-900">
+          {session ? (
+            <>
+              <img src={session.user.image.substring(0, session.user.image.lastIndexOf("="))} className="flex w-3/5 aspect-square" />
+              <p className="w-3/5 pt-6 text-md text-left font-extralight leading-relaxed font-raleway text-white">
+                {session.user.name}
+              </p>
+              <p className="w-3/5 pt-1 text-md text-left font-extralight leading-relaxed font-raleway text-white">
+                {session.user.email}
+              </p>
+            </>
+          ) : null}
+          <div className="flex w-full gap-5 mt-8 items-center justify-center">
+            <button onClick={() => { signOut({ callbackUrl: '/', redirect: true }) }} className="w-auto py-2 px-3 bg-zinc-700 text-white leading-relaxed font-raleway rounded-lg shadow-md hover:bg-zinc-800">
+              Cerrar Sesión
+            </button>
+            {session && (session.user.email === "adan10104334@gmail.com" || session.user.email === "adricoque.coqa@gmail.com") ? (
+              <div className="w-auto py-2 px-3 bg-zinc-900 text-white leading-relaxed font-raleway rounded-lg shadow-md hover:bg-black">
+                <Link className="w-full" href="/admin">Administrador</Link>
+              </div>
+            ) : null}
+          </div>
+        </div>
+        <div className="flex flex-col w-2/3 h-full text-center text-white items-center justify-start">
+          <div className="flex flex-col w-4/5 h-1/6 text-right justify-end">
+            <div className="text-xl w-full text-right font-extralight mb-2">Tu historial de actividad</div>
+            <div className="text-md w-full text-right font-extralight mb-2">
+              {selectedDate ? format(selectedDate, "dd 'de' MMMM 'del' yyyy", {locale: es}) : 'Histograma completo'}
+              <button
+                onClick={() => datePickerRef.current.setOpen(true)}
+                className="ml-2 text-md"
+                style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+              >
+                🗓️
               </button>
-              {session && session.user.email === ("adan10104334@gmail.com" || "adricoque.coqa@gmail.com") ?
-                <div className="w-auto py-2 px-3 bg-blue-700 text-white leading-relaxed font-raleway rounded-lg shadow-md hover:bg-blue-900">
-                  <Link className="w-full" href="/admin">Administrador</Link>
-                </div>
-                : <>
-                </>}
+              <DatePicker
+                selected={selectedDate}
+                onChange={date => setSelectedDate(date)}
+                ref={datePickerRef}
+                className="hidden" // Oculta el input de DatePicker
+                popperClassName="date-picker-popper"
+              />
             </div>
           </div>
-          <div className="flex w-3/4 h-5/6 text-center text-white items-center">
-            <div className="flex w-2/3 p-10 h-full border-r-gray-500 border-r-2">
-              
-            </div>
-            <div className="flex w-1/3 m-10 bg-white h-full">
-              a3
-            </div>
-          </div>
-        </motion.div>
-      </div>
-    </>
-  )
+          <EmotionsHistogram
+            data={countEmotionsByDay(filteredData)}
+            maxDetections={maxDetections}
+          />
+        </div>
+      </motion.div>
+    </div>
+  );
 }
