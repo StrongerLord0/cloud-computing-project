@@ -20,14 +20,20 @@ export default function Navigation() {
     const { data: session, status } = useSession();
 
     return (
-        <div className="flex w-full h-32 items-center justify-items-start">
-            <div className="pt-2 pb-2 pl-5 h-5/6 w-2/3 ml-auto hidden lg:flex">
+        <div className="flex w-full h-32 items-center justify-items-start bg-transparent">
+            <motion.div className={`pl-5 h-full w-1/3 ml-auto hidden lg:flex ${pathname === '/service' ? 'border-r-4 border-zinc-900' : ''}`}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ ease: 'easeInOut', duration: 1.2 }}>
                 <button>
                     <Link href="/">
-                        <Image src={boxPNG} className="flex w-auto h-full max-w-xs invert opacity-75" />
+                        <Image src={boxPNG} className="flex w-auto h-2/3 max-w-xs invert opacity-75" />
                     </Link>
                 </button>
-            </div>
+            </motion.div>
+
+            <div className="lg:w-1/3 w-0 h-full"></div>
+
             <nav className="w-full lg:w-1/3 ml-auto flex items-center">
                 <ul className="w-full lg:w-full flex justify-evenly items-center">
                     <motion.li
@@ -56,7 +62,7 @@ export default function Navigation() {
                             variants={navItemVariants}
                             transition={{ duration: 0.3 }}
                         >
-                            <Link className="w-full" href="/profile">
+                            <Link className="w-auto items-center justify-center flex" href="/profile">
                                 <motion.img
                                     className="rounded-full w-1/2"
                                     src={session.user.image}
