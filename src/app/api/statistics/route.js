@@ -25,7 +25,7 @@ export async function GET () {
         await client.connect();
 
         const collection = client.db("ByOx").collection("statistics");
-        const stats = await collection.find({}).toArray();
+        const stats = await collection.find({user: session.user._id}).toArray();
 
         return NextResponse.json(stats);
     } catch (error) {

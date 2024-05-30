@@ -21,7 +21,7 @@ export default function Navigation() {
 
     return (
         <div className="flex w-full h-32 items-center justify-items-start bg-transparent">
-            <motion.div className={`pl-5 h-full w-1/3 ml-auto hidden lg:flex ${pathname === '/service' ? 'border-r-4 border-zinc-900' : ''}`}
+            <motion.div className={`pl-5 h-full w-1/3 ml-auto hidden lg:flex ${pathname === '/service' || pathname === '/profile' ? 'border-r-4 border-zinc-900' : ''}`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ ease: 'easeInOut', duration: 1.2 }}>
