@@ -14,13 +14,12 @@ export default function Profile() {
     <>
       <div
         className="flex w-screen h-screen flex-col bg-cover items-center"
-        style={{ background: "radial-gradient(37.24% 60.39% at 53.49% 33.24%, #020A20 0%, #010309 59.81%, #000 100%, #000 100%)" }}
+        style={{ background: "radial-gradient(37.24% 60.39% at 53.49% 33.24%, #0E0F12 0%, #08090B 22%, #000 86.5%, #000 89%" }}
       >
-        <div className="flex w-full h-1/6 items-center justify-items-start">
           <Navigation />
-        </div>
+       
         <motion.div
-          className="flex w-full h-full items-center text-center"
+          className="flex w-full h-full mb-20 items-center text-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ ease: 'easeInOut', duration: 1.2 }}

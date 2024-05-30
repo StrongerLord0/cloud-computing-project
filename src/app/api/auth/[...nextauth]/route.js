@@ -22,7 +22,10 @@ export const authOptions = {
       return session;
     },
   },
-  secret: process.env.SECRET
+  secret: process.env.SECRET,
+  pages: {
+    signIn: '/signIn',
+  }
 };
 
 const handler = NextAuth(authOptions);

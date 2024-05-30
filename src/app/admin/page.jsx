@@ -33,11 +33,10 @@ export default function Profile() {
             className="flex w-screen h-screen flex-col bg-cover items-center"
             style={{ background: "radial-gradient(37.24% 60.39% at 53.49% 33.24%, #020A20 0%, #010309 59.81%, #000 100%, #000 100%)" }}
         >
-            <div className="flex w-full h-1/6 items-center justify-items-start">
-                <Navigation />
-            </div>
+            <Navigation />
+
             <motion.div
-                className="flex w-1/2 h-2/3 items-center text-center"
+                className="flex w-1/2 h-full items-center text-center"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ ease: 'easeInOut', duration: 1.2 }}
@@ -67,10 +66,10 @@ export default function Profile() {
                             </table>
                         </div>
                     </div>
-            ) : (
-            <></>
+                ) : (
+                    <></>
                 )}
-        </motion.div>
+            </motion.div>
         </div >
     )
 }

@@ -4,6 +4,7 @@ import { authOptions } from '../auth/[...nextauth]/route';
 
 export async function POST(req) {
 
+  /*
   let session;
 
     try {
@@ -14,7 +15,8 @@ export async function POST(req) {
     } catch (error){
         return NextResponse.json({ message: 'Error en la sesión, debe iniciar sesión para utilizar este servicio'}, {status: 500});
     }
-
+  */
+ 
     try {
       const formData = await req.formData();
       const file = formData.get('file');
