@@ -1,3 +1,4 @@
+"use client"
 import React from "react"
 import {signIn} from "next-auth/react"
 
@@ -10,8 +11,9 @@ export default function SignInPage() {
         </div>
         <div className="w-2/3" style={{background: "black"}}>
             <div className="w-full h-32 text-xl m-12">Inicio de Sesión</div>
+            
             <div className="flex w-full h-auto justify-start ml-12">
-                <button className="w-auto h-12" onClick={signIn()}>Iniciar Sesión con Google</button>
+                <button className="w-auto h-12" onClick={() => signIn("google", {callbackUrl: "/"})}>Iniciar Sesión con Google</button>
             </div>
         </div>
         <div className="absolute bottom-0 left-0 w-full h-auto pr-8 bg-transparent">
