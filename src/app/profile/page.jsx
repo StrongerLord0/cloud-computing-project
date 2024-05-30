@@ -8,8 +8,9 @@ import Link from "next/link";
 import EmotionsHistogram from "@/components/charts/EmotionsHistogram";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { parseISO, isSameDay, format} from "date-fns";
+import { parseISO, isSameDay, format } from "date-fns";
 import { es } from 'date-fns/locale';
+import { useAppContext } from "@/context/AppContext";
 
 export default function Profile() {
   const { data: session } = useSession();
@@ -18,6 +19,7 @@ export default function Profile() {
   const [selectedDate, setSelectedDate] = useState(null);
   const [maxDetections, setMaxDetections] = useState([]);
   const datePickerRef = useRef();
+  const { sharedData } = useAppContext();
 
   const countEmotionsByDay = (emotions) => {
     const emotionCounts = { Enojo: 0, Disgusto: 0, Temor: 0, Feliz: 0, Neutral: 0, Triste: 0, Sorpresa: 0 };
@@ -48,7 +50,6 @@ export default function Profile() {
 
   const fetchPersonalStats = async () => {
     const response = await fetch(`/api/statistics/`, { method: "GET" });
-
     if (response.ok) {
       const data = await response.json();
       setData(data);
@@ -61,8 +62,27 @@ export default function Profile() {
     }
   };
 
+  const fetchOthersStats = async () => {
+    const response = await fetch(`/api/statistics/${sharedData._id}`, { method: 'GET' });
+    if (response.ok) {
+      const data = await response.json();
+      setData(data);
+      setFilteredData(data);
+      const emotionsByDay = countEmotionsByDay(data);
+      const maxDetectionsValue = Math.max(...emotionsByDay.map(item => item.Detecciones));
+      setMaxDetections(Array.from({ length: maxDetectionsValue + 1 }, (_, i) => i));
+    } else {
+      console.error('Error:', response.status);
+    }
+  };
+
   useEffect(() => {
-    fetchPersonalStats();
+    if (sharedData) {
+      fetchOthersStats();
+      console.log(sharedData);
+    } else {
+      fetchPersonalStats();
+    }
   }, []);
 
   useEffect(() => {
@@ -109,32 +129,60 @@ export default function Profile() {
               Cerrar Sesión
             </button>
             {session && (session.user.email === "adan10104334@gmail.com" || session.user.email === "adricoque.coqa@gmail.com") ? (
-              <div className="w-auto py-2 px-3 bg-zinc-900 text-white leading-relaxed font-raleway rounded-lg shadow-md hover:bg-black">
+              <button className="w-auto py-2 px-3 bg-zinc-900 text-white leading-relaxed font-raleway rounded-lg shadow-md hover:bg-black">
                 <Link className="w-full" href="/admin">Administrador</Link>
-              </div>
+              </button>
             ) : null}
           </div>
         </div>
         <div className="flex flex-col w-2/3 h-full text-center text-white items-center justify-start">
           <div className="flex flex-col w-4/5 h-1/6 text-right justify-end">
-            <div className="text-xl w-full text-right font-extralight mb-2">Tu historial de actividad</div>
-            <div className="text-md w-full text-right font-extralight mb-2">
-              {selectedDate ? format(selectedDate, "dd 'de' MMMM 'del' yyyy", {locale: es}) : 'Histograma completo'}
-              <button
-                onClick={() => datePickerRef.current.setOpen(true)}
-                className="ml-2 text-md"
-                style={{ background: 'none', border: 'none', cursor: 'pointer' }}
-              >
-                🗓️
-              </button>
-              <DatePicker
-                selected={selectedDate}
-                onChange={date => setSelectedDate(date)}
-                ref={datePickerRef}
-                className="hidden" // Oculta el input de DatePicker
-                popperClassName="date-picker-popper"
-              />
-            </div>
+            {
+              sharedData ? (
+                <>
+                  <div className="text-xl w-full text-right font-extralight mb-2">Historial de actividad</div>
+                  <div className="text-md w-full text-right font-light mb-2">Usuario: {sharedData.name}</div>
+                  <div className="text-md w-full text-right font-extralight mb-2">
+                    {selectedDate ? format(selectedDate, "dd 'de' MMMM 'del' yyyy", { locale: es }) : 'Histograma completo'}
+                    <button
+                      onClick={() => datePickerRef.current.setOpen(true)}
+                      className="ml-2 text-md"
+                      style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+                    >
+                      🗓️
+                    </button>
+                    <DatePicker
+                      selected={selectedDate}
+                      onChange={date => setSelectedDate(date)}
+                      ref={datePickerRef}
+                      className="hidden" // Oculta el input de DatePicker
+                      popperClassName="date-picker-popper"
+                    />
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="text-xl w-full text-right font-extralight mb-2">Tu historial de actividad</div>
+                  <div className="text-md w-full text-right font-extralight mb-2">
+                    {selectedDate ? format(selectedDate, "dd 'de' MMMM 'del' yyyy", { locale: es }) : 'Histograma completo'}
+                    <button
+                      onClick={() => datePickerRef.current.setOpen(true)}
+                      className="ml-2 text-md"
+                      style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+                    >
+                      🗓️
+                    </button>
+                    <DatePicker
+                      selected={selectedDate}
+                      onChange={date => setSelectedDate(date)}
+                      ref={datePickerRef}
+                      className="hidden" // Oculta el input de DatePicker
+                      popperClassName="date-picker-popper"
+                    />
+                  </div>
+                </>
+              )
+            }
           </div>
           <EmotionsHistogram
             data={countEmotionsByDay(filteredData)}

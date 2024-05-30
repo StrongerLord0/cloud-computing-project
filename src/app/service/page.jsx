@@ -104,10 +104,10 @@ export default function About() {
     const handleEmotionDetection = (data) => {
         if (data && !data.error) {
             const detectedEmotion = translateEmotion(data.result[0].dominant_emotion);
-
             const transformedData = transformEmotionsData(data.result[0].emotion)
             setEmotionJson(transformedData);
             setEmotion(detectedEmotion);
+            saveEmotionToStatistics(data.result[0].dominant_emotion);
             fetchHashtagInterpreter(data.result[0].emotion);
             console.log(data);
 

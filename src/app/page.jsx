@@ -20,8 +20,8 @@ export default function Home() {
                 transition={{ ease: 'easeInOut', duration: 1.2 }}
             >
                     <Navigation />
-                <div className="flex w-1/2 h-full mb-20 items-center text-center">
-                    <div className="flex w-full flex-col text-center text-white">
+                <div className="flex w-1/2 h-full mb-20 justify-start text-center">
+                    <div className="flex w-full h-5/6 flex-col text-center text-white justify-center">
                         <h1 className="text-4xl font-normal font-raleway text-gray-300">ByOx</h1>
                         <p className="text-md font-normal leading-relaxed font-raleway text-gray-300">Build your Own eXperience.</p>
                     </div>
