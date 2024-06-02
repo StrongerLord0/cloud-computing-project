@@ -6,7 +6,7 @@ import { authOptions } from "../auth/[...nextauth]/route";
 export const dynamic = 'force-dynamic'
 
 export async function POST(req, res) {
-    /*
+    
     let session;
     try {
         session = await getServerSession(authOptions);
@@ -16,7 +16,6 @@ export async function POST(req, res) {
     } catch (error){
         return NextResponse.json({ message: 'Error en la sesión, debe iniciar sesión para utilizar este servicio'}, {status: 500});
     }
-    */
     
     const API_KEY = process.env.TWEET_API_KEY
     const body = await req.json();
