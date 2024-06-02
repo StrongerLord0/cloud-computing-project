@@ -55,6 +55,7 @@ export default function About() {
         if (data && !data.error) {
             const detectedEmotion = translateEmotion(data.result[0].dominant_emotion);
             const transformedData = transformEmotionsData(data.result[0].emotion);
+            const transformedData = transformEmotionsData(data.result[0].emotion);
             setEmotionJson(transformedData);
             setEmotion(detectedEmotion);
             saveEmotionToStatistics(data.result[0].dominant_emotion, session.user._id, new Date().toISOString());
@@ -125,3 +126,4 @@ export default function About() {
         </div>
     )
 }
+
